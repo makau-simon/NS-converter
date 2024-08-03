@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme_color" content="crimson">
+  <title>NS converter</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="images/binary.png">
+</head>
+<style>
+  * {
+    font-family: lucida;
+  }
+
+  body {
+    font-size: 15pt;
+    margin: 0;
+    padding: 0;
+
+  }
+
+  header {
+    width: 100%;
+    padding: 1px;
+    color: crimson;
+    text-align: center;
+    background: #fff;
+    font-weight: 900;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .1);
+  }
+
+  .converter {
+    margin: auto;
+    width: 90%;
+    padding: 5px;
+    display: flex;
+    gap: 10px;
+    margin-top: 5%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+  }
+
+  .converter button:active {
+    opacity: .6;
+  }
+
+  input {
+    height: 30px;
+    width: 65%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 0.5px solid #262626;
+    font-size: 18px;
+  }
+
+  input:focus {
+    outline: none;
+    border: 1.5px solid #434778;
+  }
+
+  #tabs {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  #tabs button {
+    width: 140px;
+    font-size: 14px;
+    font-weight: 900;
+    font-family: sans-serif;
+    color: #42445A;
+    text-transform: uppercase;
+    padding: 6px;
+    background: #fff;
+    border: none;
+    transition: background 0.2s;
+  }
+
+  #tabs button:active {
+    background: #f2f2f2;
+  }
+
+  label {
+    font-weight: 800;
+    color: #2E294A;
+  }
+
+  .clear {
+    height: 30px;
+    background: crimson;
+    color: #fff;
+    width: 40%;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    margin-top: 4%;
+    font-weight: 900;
+  }
+
+  .calculator {
+    width: 90%;
+    margin: auto;
+    padding: 5px;
+    display: flex;
+    gap: 10px;
+    margin-top: 8%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    display: none;
+  }
+
+  .calculator button {
+    width: 35%;
+    height: 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background: #2D8A68;
+    color: #fff;
+    font-weight: 900;
+  }
+
+  .calculator button:active {
+    opacity: .6;
+  }
+
+  .calculator p {
+    font-weight: 900;
+    font-size: 20px;
+    color: #222F3C;
+  }
+
+  #sub {
+    background: #2C567D;
+  }
+
+  #del {
+    background: crimson;
+  }
+
+  hr {
+    width: 70%;
+    border: 1px solid #7D7E8F;
+    border-radius: 5px;
+  }
+
+  @media screen and (min-height:513px) {
+    .converter {
+      gap: 2px;
+    }
+
+    .calculator {
+      gap: 2px;
+    }
+  }
+
+  @media screen and (max-height:400px) {
+    .converter {
+      gap: 5px;
+    }
+
+    .calculator {
+      gap: 5px;
+    }
+  }
+</style>
+
+
+<script src="main.js"></script>
+
+<body>
+  <header>
+    <h3>Number System Converter</h3>
+    <div id="tabs">
+      <button class="btn1">converter</button>
+      <button class="btn2">binary calculator</button>
+    </div>
+  </header>
+  <div class="converter">
+    <label for="decimal">Decimal</label>
+    <input placeholder="Enter decimal.." class="decimal" type="number">
+    <label for="decimal">Binary</label>
+    <input placeholder="Enter binary.." class="binary">
+    <label for="decimal">Octal</label>
+    <input placeholder="Enter octal.." class="octal">
+    <label for="hexa-decimal">Hexa-decimal</label>
+    <input placeholder="Enter hexadecimal.." class="hexa-decimal">
+    <button class="clear">clear fields</button>
+  </div>
+  <div class="calculator">
+    <label for="bin1">Binary number 1</label>
+    <input placeholder="First number..." type="number" class="bin1">
+    <label for="bin2">Binary number 2</label>
+    <input placeholder="Second number..." type="number" class="bin2">
+    <hr>
+    <p class="res">Result</p>
+    <button id="add">Addition</button>
+    <button id="sub">subtraction</button>
+    <button id="del">clear fields</button>
+  </div>
+  <script>
+    let btn1 = document.querySelector('.btn1');
+    let btn2 = document.querySelector('.btn2');
+    let con = document.querySelector('.converter');
+    let calc = document.querySelector('.calculator');
+    let bin1 = document.querySelector('.bin1');
+    let bin2 = document.querySelector('.bin2');
+    let res = document.querySelector('.res');
+    let add = document.querySelector('#add');
+    let sub = document.querySelector('#sub');
+    let del = document.querySelector('#del');
+    let dec = document.querySelector('.decimal');
+    let bin = document.querySelector('.binary');
+    let oct = document.querySelector('.octal');
+    let hex = document.querySelector('.hexa-decimal');
+    btn1.style.borderBottom = '2px solid crimson';
+    btn2.addEventListener('click', () => {
+      btn2.style.borderBottom = '2px solid crimson';
+      btn1.style.borderBottom = 'none';
+      con.style.display = 'none';
+      calc.style.display = 'flex';
+    })
+    btn1.addEventListener('click', () => {
+      btn1.style.borderBottom = '2px solid crimson';
+      btn2.style.borderBottom = 'none';
+      con.style.display = 'flex';
+      calc.style.display = 'none';
+    })
+    let clear = document.querySelector('.clear');
+    clear.addEventListener('click', clearAll);
+    //converter
+    dec.addEventListener('input', () => {
+      bin.value = decimalToBinary(dec.value);
+      oct.value = decimalToOctal(dec.value);
+      hex.value = decimalToHexadecimal(dec.value);
+      if (dec.value == '') {
+        clearAll();
+      }
+    })
+    bin.addEventListener('input', () => {
+      if (binValidator(bin.value)) {
+        bin.style.borderColor = '#434778';
+        dec.value = binaryToDecimal(bin.value);
+        oct.value = binaryToOctal(bin.value);
+        hex.value = binaryToHexadecimal(bin.value);
+      } else {
+        bin.style.borderColor = 'red';
+      }
+      if (bin.value == '') {
+        clearAll();
+      }
+
+    })
+    //binary input validation
+    function binValidator(num) {
+      for (let i = 0; i < num.length; i++) {
+        if (num[i] != "0" && num[i] != "1" && num[i] != ".") {
+          return false;
+        }
+      }
+      return true;
+    }
+    oct.addEventListener('input', () => {
+      if (octalValidator(oct.value)) {
+        oct.style.borderColor = '#434778';
+        bin.value = octalToBinary(oct.value);
+        dec.value = octalToDecimal(oct.value);
+        hex.value = octalToHexadecimal(oct.value);
+      } else {
+        oct.style.borderColor = 'red';
+      }
+      if (oct.value == '') {
+        clearAll();
+      }
+    })
+    // octal input validation
+    function octalValidator(num) {
+      for (let i = 0; i < num.length; i++) {
+        if (num[i] != "0" && num[i] != "1" && num[i] != "2" && num[i] != "3" && num[i] != "4" && num[i] != "5" && num[i] != "6" && num[i] != "7" &&
+          num[i] != ".") {
+          return false;
+        }
+      }
+      return true;
+    }
+    hex.addEventListener('input', () => {
+      if (hexValidator(hex.value)) {
+        hex.style.borderColor = '#434778';
+        bin.value = hexadecimalToBinary(hex.value);
+        dec.value = hexadecimalToDecimal(hex.value);
+        oct.value = hexadecimalToOctal(hex.value);
+      } else {
+        hex.style.borderColor = 'red';
+      }
+      if (hex.value == '') {
+        clearAll();
+      }
+    })
+    //hex input Validation
+    function hexValidator(num) {
+      for (let i = 0; i < num.length; i++) {
+        if (num[i] != "0" && num[i] != "1" && num[i] != "2" && num[i] != "3" && num[i] != "4" && num[i] != "5" && num[i] != "6" && num[i] != "7" && num[i] != "8" && num[i] != "9" && num[i] != "10" && num[i] != "." && num[i] != "A" && num[i] != "B" && num[i] != "C" && num[i] != "D" && num[i] != "E" && num[i] != "F" && num[i] != "a" && num[i] != "b" && num[i] != "c" && num[i] != "d" && num[i] != "e" && num[i] != "f") {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function clearAll() {
+      dec.value = '';
+      document.querySelector('.binary').value = '';
+      oct.value = '';
+      hex.value = '';
+    }
+    //binary calculator
+    bin1.addEventListener('input', () => {
+      if (bin1Validator(bin1.value)) {
+        res.textContent = 'Result'
+        bin1.style.borderColor = '#434778';
+      } else {
+        bin1.style.borderColor = 'red';
+        res.textContent = 'invalid binary number!'
+      }
+    })
+    bin2.addEventListener('input', () => {
+      if (bin1Validator(bin2.value)) {
+        bin2.style.borderColor = '#434778';
+        res.textContent = 'Result'
+      } else {
+        bin2.style.borderColor = 'red';
+        res.textContent = 'invalid binary number!'
+
+      }
+    })
+    add.addEventListener('click', () => {
+      function addBinaryFloats(binary1, binary2) {
+        let [int1, frac1] = binary1.split(".");
+        let [int2, frac2] = binary2.split(".");
+        let decInt1 = parseInt(int1, 2);
+        let decInt2 = parseInt(int2, 2);
+        let decFrac1 = parseInt(frac1 || "0", 2) / Math.pow(2, (frac1 || "").length);
+        let decFrac2 = parseInt(frac2 || "0", 2) / Math.pow(2, (frac2 || "").length);
+        let sumInt = decInt1 + decInt2;
+        let sumFrac = decFrac1 + decFrac2;
+        let sumBinary = sumInt.toString(2) + (sumFrac !== 0 ? "." + sumFrac.toString(2).substr(2) : "");
+
+        return sumBinary;
+      }
+
+      res.textContent = addBinaryFloats(bin1.value, bin2.value);
+    });
+    //bin validation
+    function bin1Validator(num) {
+      for (let i = 0; i < num.length; i++) {
+        if (num[i] != "0" && num[i] != "1" && num[i] != ".") {
+          return false;
+        }
+      }
+      return true;
+    }
+    sub.addEventListener('click', () => {
+      function subtractBinaryFloats(binary1, binary2) {
+        // Split binary numbers into integer and fractional parts
+        let [int1, frac1] = binary1.split(".");
+        let [int2, frac2] = binary2.split(".");
+
+        // Convert integer parts to decimal
+        let decInt1 = parseInt(int1, 2);
+        let decInt2 = parseInt(int2, 2);
+
+        // Convert fractional parts to decimal
+        let decFrac1 = parseInt(frac1 || "0", 2) / Math.pow(2, (frac1 || "").length);
+        let decFrac2 = parseInt(frac2 || "0", 2) / Math.pow(2, (frac2 || "").length);
+
+        // Subtract integer and fractional parts separately
+        let diffInt = decInt1 - decInt2;
+        let diffFrac = decFrac1 - decFrac2;
+
+        // Combine integer and fractional parts
+        let diffBinary = diffInt.toString(2) + (diffFrac !== 0 ? "." + diffFrac.toString(2).substr(2) : "");
+
+        return diffBinary;
+      }
+
+      // Example usage:
+      res.textContent = subtractBinaryFloats(bin1.value, bin2.value);
+    });
+    del.addEventListener('click', () => {
+      bin1.value = '';
+      bin2.value = '';
+      res.textContent = 'Result';
+    });
+    //dec to bin
+    function decimalToBinary(num) {
+      let binary = '';
+      let integerPart = Math.floor(num);
+      let decimalPart = num - integerPart;
+
+      while (integerPart > 0) {
+        binary = (integerPart % 2) + binary;
+        integerPart = Math.floor(integerPart / 2);
+      }
+
+      binary += '.';
+
+      let precision = 20;
+      while (precision > 0 && decimalPart > 0) {
+        decimalPart *= 2;
+        if (decimalPart >= 1) {
+          binary += '1';
+          decimalPart -= 1;
+        } else {
+          binary += '0';
+        }
+        precision--;
+      }
+      return binary;
+    }
+    //dec to oct
+    function decimalToOctal(num) {
+      let octal = '';
+      let integerPart = Math.floor(num);
+      let decimalPart = num - integerPart;
+
+      while (integerPart > 0) {
+        octal = (integerPart % 8) + octal;
+        integerPart = Math.floor(integerPart / 8);
+      }
+      octal += '.';
+      let precision = 20;
+      while (precision > 0 && decimalPart > 0) {
+        decimalPart *= 8;
+        octal += Math.floor(decimalPart);
+        decimalPart -= Math.floor(decimalPart);
+        precision--;
+      }
+      return octal;
+    }
+    //dec to hex
+    function decimalToHexadecimal(num) {
+      let hexadecimal = '';
+      let integerPart = Math.floor(num);
+      let decimalPart = num - integerPart;
+      while (integerPart > 0) {
+        let remainder = integerPart % 16;
+        if (remainder < 10) {
+          hexadecimal = remainder + hexadecimal;
+        } else {
+          hexadecimal = String.fromCharCode(remainder + 55) + hexadecimal;
+        }
+        integerPart = Math.floor(integerPart / 16);
+      }
+      hexadecimal += '.';
+      let precision = 20;
+      while (precision > 0 && decimalPart > 0) {
+        decimalPart *= 16;
+        let intPart = Math.floor(decimalPart);
+        if (intPart < 10) {
+          hexadecimal += intPart;
+        } else {
+          hexadecimal += String.fromCharCode(intPart + 55);
+        }
+        decimalPart -= intPart;
+        precision--;
+      }
+
+      return hexadecimal;
+    }
+    //bin to dec
+    function binaryToDecimal(binary) {
+      let integerPart = 0;
+      let decimalPart = 0;
+      let isDecimal = false;
+      let power = 0;
+      for (let i = 0; i < binary.length; i++) {
+        if (binary[i] === '.') {
+          isDecimal = true;
+          continue;
+        }
+        let digit = parseInt(binary[i]);
+        if (!isDecimal) {
+          integerPart = integerPart * 2 + digit;
+        } else {
+          decimalPart += digit * Math.pow(2, -1 * (++power));
+        }
+      }
+      return integerPart + decimalPart;
+    }
+    //bin to oct
+    function binaryToOctal(binary) {
+      const [integerPart, fractionalPart] = binary.split('.');
+      let octalInteger = parseInt(integerPart, 2).toString(8);
+      let octalFractional = '';
+      if (fractionalPart) {
+        let fractionalPartBinary = '0.' + fractionalPart;
+        let fractionalPartDecimal = 0;
+        let power = -1;
+        for (let i = 2; i < fractionalPartBinary.length; i++) {
+          fractionalPartDecimal += parseInt(fractionalPartBinary[i]) * Math.pow(2, power);
+          power--;
+        }
+        let fractionalPartOctal = '';
+        let precision = 5;
+        while (precision > 0 && fractionalPartDecimal > 0) {
+          fractionalPartDecimal *= 8;
+          let intPart = Math.floor(fractionalPartDecimal);
+          fractionalPartOctal += intPart;
+          fractionalPartDecimal -= intPart;
+          precision--;
+        }
+        octalFractional = fractionalPartOctal;
+      }
+      return octalFractional ? `${octalInteger}.${octalFractional}` : octalInteger;
+    }
+    //bin to hex
+    function binaryToHexadecimal(binary) {
+      const [integerPart, fractionalPart] = binary.split('.');
+      let hexadecimalInteger = parseInt(integerPart, 2).toString(16).toUpperCase();
+      let hexadecimalFractional = '';
+      if (fractionalPart) {
+        let fractionalPartBinary = '0.' + fractionalPart;
+        let fractionalPartDecimal = 0;
+        let power = -1;
+        for (let i = 2; i < fractionalPartBinary.length; i++) {
+          fractionalPartDecimal += parseInt(fractionalPartBinary[i]) * Math.pow(2, power);
+          power--;
+        }
+        let fractionalPartHexadecimal = '';
+        let precision = 4;
+        while (precision > 0 && fractionalPartDecimal > 0) {
+          fractionalPartDecimal *= 16;
+          let intPart = Math.floor(fractionalPartDecimal);
+          if (intPart < 10) {
+            fractionalPartHexadecimal += intPart;
+          } else {
+            fractionalPartHexadecimal += String.fromCharCode(intPart + 55);
+          }
+          fractionalPartDecimal -= intPart;
+          precision--;
+        }
+        hexadecimalFractional = fractionalPartHexadecimal.toUpperCase();
+      }
+      return hexadecimalFractional ? `${hexadecimalInteger}.${hexadecimalFractional}` : hexadecimalInteger;
+    }
+    //oct to dec
+    function octalToDecimal(octal) {
+      let integerPart = 0;
+      let decimalPart = 0;
+      let isDecimal = false;
+      let power = 0;
+      for (let i = 0; i < octal.length; i++) {
+        if (octal[i] === '.') {
+          isDecimal = true;
+          continue;
+        }
+        let digit = parseInt(octal[i]);
+        if (!isDecimal) {
+          integerPart = integerPart * 8 + digit;
+        } else {
+          decimalPart += digit * Math.pow(8, -1 * (++power));
+        }
+      }
+      return integerPart + decimalPart;
+    }
+    //oct to bin
+    function octalToBinary(octal) {
+      let binary = '';
+      let integerPart = '';
+      let decimalPart = '';
+      if (octal.includes('.')) {
+        [integerPart, decimalPart] = octal.split('.');
+      } else {
+        integerPart = octal;
+      }
+      for (let i = 0; i < integerPart.length; i++) {
+        let digit = parseInt(integerPart[i]);
+        binary += digit.toString(2).padStart(3, '0');
+      }
+      if (decimalPart !== '') {
+        binary += '.';
+        for (let i = 0; i < decimalPart.length; i++) {
+          let digit = parseInt(decimalPart[i]);
+          binary += digit.toString(2).padStart(3, '0');
+        }
+      }
+      return binary;
+    }
+    //oct to hex
+    function octalToHexadecimal(octal) {
+      let hexadecimal = '';
+      let integerPart = '';
+      let decimalPart = '';
+      if (octal.includes('.')) {
+        [integerPart, decimalPart] = octal.split('.');
+      } else {
+        integerPart = octal;
+      }
+      let integerDecimal = parseInt(integerPart, 8);
+      hexadecimal += integerDecimal.toString(16).toUpperCase();
+      if (decimalPart !== '') {
+        hexadecimal += '.';
+        let decimalDecimal = 0;
+        let power = -1;
+        for (let i = 0; i < decimalPart.length; i++) {
+          decimalDecimal += parseInt(decimalPart[i]) * Math.pow(8, power);
+          power--;
+        }
+        let decimalHexadecimal = '';
+        let precision = 5;
+        while (precision > 0 && decimalDecimal > 0) {
+          decimalDecimal *= 16;
+          let intPart = Math.floor(decimalDecimal);
+          if (intPart < 10) {
+            decimalHexadecimal += intPart;
+          } else {
+            decimalHexadecimal += String.fromCharCode(intPart + 55);
+          }
+          decimalDecimal -= intPart;
+          precision--;
+        }
+        hexadecimal += decimalHexadecimal.toUpperCase();
+      }
+      return hexadecimal;
+    }
+    //hex to dec
+    function hexadecimalToDecimal(hexadecimal) {
+      let integerPart = 0;
+      let decimalPart = 0;
+      let isDecimal = false;
+      let power = 0;
+      hexadecimal = hexadecimal.toLowerCase();
+      for (let i = 0; i < hexadecimal.length; i++) {
+        if (hexadecimal[i] === '.') {
+          isDecimal = true;
+          continue;
+        }
+        let digit = isNaN(hexadecimal[i]) ? hexadecimal[i].charCodeAt(0) - 87 : parseInt(hexadecimal[i], 16);
+        if (!isDecimal) {
+          integerPart = integerPart * 16 + digit;
+        } else {
+          decimalPart += digit * Math.pow(16, -1 * (++power));
+        }
+      }
+      return integerPart + decimalPart;
+    }
+    //hex to bin
+    function hexadecimalToBinary(hexadecimal) {
+      let binary = '';
+      let integerPart = '';
+      let decimalPart = '';
+      if (hexadecimal.includes('.')) {
+        [integerPart, decimalPart] = hexadecimal.split('.');
+      } else {
+        integerPart = hexadecimal;
+      }
+      for (let i = 0; i < integerPart.length; i++) {
+        let digit = isNaN(integerPart[i]) ? integerPart[i].toUpperCase().charCodeAt(0) - 55 : parseInt(integerPart[i], 16);
+        binary += digit.toString(2).padStart(4, '0');
+      }
+      if (decimalPart !== '') {
+        binary += '.';
+        for (let i = 0; i < decimalPart.length; i++) {
+          let digit = isNaN(decimalPart[i]) ? decimalPart[i].toUpperCase().charCodeAt(0) - 55 : parseInt(decimalPart[i], 16);
+          binary += digit.toString(2).padStart(4, '0');
+        }
+      }
+      return binary;
+    }
+    //hex to oct
+    function hexadecimalToOctal(hexadecimal) {
+      let binary = '';
+      let integerPart = '';
+      let decimalPart = '';
+      if (hexadecimal.includes('.')) {
+        [integerPart, decimalPart] = hexadecimal.split('.');
+      } else {
+        integerPart = hexadecimal;
+      }
+      for (let i = 0; i < integerPart.length; i++) {
+        let digit = isNaN(integerPart[i]) ? integerPart[i].toUpperCase().charCodeAt(0) - 55 : parseInt(integerPart[i], 16);
+        binary += digit.toString(2).padStart(4, '0');
+      }
+      if (decimalPart !== '') {
+        binary += '.';
+        for (let i = 0; i < decimalPart.length; i++) {
+          let digit = isNaN(decimalPart[i]) ? decimalPart[i].toUpperCase().charCodeAt(0) - 55 : parseInt(decimalPart[i], 16);
+          binary += digit.toString(2).padStart(4, '0');
+        }
+      }
+      let octal = '';
+      let integerBinary = binary.split('.')[0];
+      let decimalBinary = binary.split('.')[1] || '';
+      for (let i = 0; i < integerBinary.length; i += 3) {
+        let chunk = integerBinary.slice(i, i + 3);
+        octal += parseInt(chunk, 2).toString(8);
+      }
+      if (decimalBinary !== '') {
+        octal += '.';
+        for (let i = 0; i < decimalBinary.length; i += 3) {
+          let chunk = decimalBinary.slice(i, i + 3);
+          octal += parseInt(chunk, 2).toString(8);
+        }
+      }
+      return octal;
+    }
+  </script>
+</body>
+
+</html>
